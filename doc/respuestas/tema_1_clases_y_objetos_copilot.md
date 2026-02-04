@@ -20,33 +20,25 @@ Por favor, escribe en impersonal las respuestas.
 ### Respuesta
 A la programación orientada a objetos se le atribuyen cuatro características fundamentales: abstracción, encapsulación, herencia y polimorfismo.
 
-La abstracción consiste en centrarse en los aspectos esenciales de un objeto, ocultando los detalles irrelevantes. En la práctica, esto implica diseñar clases que representen conceptos del mundo real o del problema a resolver, exponiendo solo lo necesario mediante métodos públicos. Así, se facilita el uso de un objeto sin necesidad de conocer cómo está implementado internamente, algo similar a utilizar una biblioteca en C sin conocer su código fuente.
+La abstracción consiste en centrarse en los aspectos esenciales de un objeto, ocultando los detalles irrelevantes. En la práctica, esto implica diseñar clases que representen conceptos cuyo funcionamiento sea comprensible sin tener que conocerlo detalladamente.
 
 La encapsulación se refiere a agrupar datos y funciones dentro de una misma entidad, la clase, y controlar qué partes pueden ser accedidas desde fuera. En Java esto se logra mediante modificadores como private, public o protected. Encapsular permite evitar modificaciones accidentales de datos internos y obliga a interactuar con los objetos a través de métodos bien definidos, creando interfaces más seguras y coherentes.
 
-La herencia permite crear nuevas clases basadas en otras ya existentes, reutilizando código y evitando duplicación. Una clase hija hereda atributos y métodos de la clase padre, pudiendo extender o modificar su comportamiento. Este mecanismo es útil para representar jerarquías; por ejemplo, una clase Vehiculo puede dar origen a Coche o Moto, compartiendo características comunes.
+La herencia permite crear nuevas clases basadas en otras ya existentes, reutilizando código y evitando duplicación. Una clase hija hereda atributos y métodos de la clase padre, pudiendo extender o modificar su comportamiento mediante un sistema jerárquico.
 
 Finalmente, el polimorfismo permite que un mismo método pueda comportarse de forma distinta según el tipo de objeto que lo utilice. En Java esto se consigue principalmente mediante la sobreescritura de métodos en clases hijas. Gracias al polimorfismo, es posible escribir código más general que trabaje con referencias a clases base, mientras que la implementación concreta se decide en tiempo de ejecución, produciendo programas más flexibles y adaptables.
 
 ## 2. Cita cuatro lenguajes populares que permitan la programación orientada a objetos
 
 ### Respuesta
-Existen numerosos lenguajes que permiten la programación orientada a objetos, pero algunos destacan por su uso generalizado y por la madurez de sus herramientas. Entre los más populares se encuentra Java, que fue diseñado desde cero con el modelo de clases y objetos como eje central. Java propone una sintaxis relativamente accesible y un ecosistema muy amplio, lo que facilita el aprendizaje y la creación de aplicaciones de todo tipo, desde software de escritorio hasta sistemas empresariales.
-
-Otro lenguaje muy empleado es C++, que extiende al lenguaje C añadiendo clases, objetos y características avanzadas como herencia múltiple y polimorfismo. Aunque su curva de aprendizaje puede ser más pronunciada, permite un control muy fino sobre los recursos del sistema, motivo por el cual se utiliza en ámbitos como videojuegos, sistemas embebidos o aplicaciones de alto rendimiento. Para alguien que proviene de C, la transición hacia el modelo orientado a objetos en C++ suele ser más progresiva.
-
-También es ampliamente utilizado Python, que aunque admite varios paradigmas de programación, ofrece un soporte muy flexible para la orientación a objetos. En Python, todo es un objeto, lo que facilita adoptar gradualmente este enfoque. Su sintaxis simple y su gran comunidad lo convierten en una excelente opción para iniciarse en conceptos de OOP sin añadir complejidad innecesaria.
-
-Finalmente, C# es otro lenguaje muy destacado, desarrollado por Microsoft y orientado desde sus inicios al uso intensivo de clases y objetos. Su diseño moderno, junto con el framework .NET, permite crear aplicaciones para escritorio, web, móviles y videojuegos (especialmente con Unity). C# combina ideas de Java y C++, pero con una sintaxis clara y herramientas muy potentes.
+Java, C++, Python, C#
 
 ## 3. Los paradigmas anteriores a la POO, ¿Qué es la **programación estructurada**? y, todavía mejor, ¿Qué es la **programación modular**?
 
 ### Respuesta
-La programación estructurada es un paradigma que organiza el código en bloques lógicos utilizando únicamente tres estructuras básicas de control: secuencia, selección e iteración. Este enfoque surgió para combatir el uso excesivo de saltos incontrolados (gotos), muy comunes en lenguajes antiguos, que dificultaban entender y mantener los programas. Al estructurar el flujo de forma clara, se facilita la lectura y evita la aparición del llamado “código espagueti”. Para alguien que ha programado en C, este paradigma resulta muy familiar, ya que el lenguaje fue diseñado siguiendo precisamente estos principios.
+La programación estructurada es un paradigma que organiza el código en bloques lógicos utilizando únicamente tres estructuras básicas de control: secuencia, selección e iteración. Surge como medida para evitar los saltos incontrolados de lenguajes anteriores que dificultaban la comprensión del código.
 
-Por su parte, la programación modular representa un paso adicional dentro del paradigma estructurado. En lugar de escribir todo el programa como un único bloque, se divide la solución en módulos independientes, normalmente funciones o conjuntos de funciones agrupadas por responsabilidad. Cada módulo debe cumplir una tarea concreta, y el programa principal las utiliza como si fueran piezas de un ensamblaje. Esta separación mejora la reutilización, permite trabajar en equipo y reduce errores, porque los módulos se pueden probar por separado.
-
-En lenguajes como C, la modularidad se consigue utilizando funciones y organizando el código en distintos archivos .c y .h. Con ello, se puede pensar en cada módulo como una “caja negra”: importa qué hace, pero no es necesario saber cómo está implementado. Este principio sirvió de base conceptual para la posterior transición hacia la programación orientada a objetos, que lleva la idea de “caja negra” más lejos al encapsular datos y comportamientos dentro de entidades llamadas clases.
+La programación modular representa un paso adicional dentro del paradigma estructurado. En lugar de escribir todo el programa como un único bloque, se divide en funciones más concretas (de ahí "modular"). Esto facilita la comprensión y la depuración del código al estar dividido en fragmentos específicos.
 
 ## 4. ¿Qué tres elementos definen a un objeto en programación orientada a objetos?
 
