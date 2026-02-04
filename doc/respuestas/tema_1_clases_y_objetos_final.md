@@ -43,9 +43,9 @@ Por su parte, la programación modular representa un paso adicional dentro del p
 ## 4. ¿Qué tres elementos definen a un objeto en programación orientada a objetos?
 
 ### Respuesta
-En programación orientada a objetos, un objeto se define principalmente mediante estado, comportamiento e identidad. Estos tres elementos permiten representar entidades del mundo real o del propio programa de forma coherente, combinando datos y operaciones dentro de una misma unidad. Para alguien acostumbrado a C sin OOP, se puede pensar en un objeto como una evolución de un struct, pero con funciones asociadas y con un mecanismo formal para distinguir cada instancia.
+En programación orientada a objetos, un objeto se define principalmente mediante estado, comportamiento e identidad. Estos tres elementos permiten representar entidades del mundo real o del propio programa de forma coherente, combinando datos y operaciones dentro de una misma unidad.
 
-El estado se refiere a los datos que almacena un objeto, es decir, los valores de sus atributos en un momento dado. Este estado puede cambiar a lo largo de la ejecución, igual que las variables dentro de un struct cambian según las operaciones del programa. En una clase Java, estos datos suelen declararse como variables de instancia, y representan las características que describen al objeto, como el color de un coche o el saldo de una cuenta bancaria.
+El estado se refiere a los datos que almacena un objeto, es decir, los valores de sus atributos en un momento dado. Este estado puede cambiar a lo largo de la ejecución, igual que las variables dentro de un struct cambian según las operaciones del programa. En una clase Java, estos datos suelen declararse como variables de instancia, y representan las características que describen al objeto.
 
 El comportamiento está definido por los métodos del objeto, que especifican las acciones que puede realizar o las operaciones que pueden modifican su estado. A diferencia de C, donde las funciones están separadas de las estructuras, en Java los métodos forman parte directa de la clase, permitiendo que cada objeto "sepa" cómo actuar sobre sí mismo. Este acoplamiento entre datos y métodos es uno de los pilares que distingue la POO de la programación estructurada.
 
@@ -54,9 +54,9 @@ Finalmente, la identidad permite diferenciar un objeto de otro, incluso si ambos
 ## 5. ¿Qué es una clase? ¿Es lo mismo que un objeto? ¿Qué es una instancia? ¿Todos los lenguajes orientados a objetos manejan el concepto de clase?
 
 ### Respuesta
-Una clase es una plantilla o modelo que describe cómo serán los objetos que se creen a partir de ella. En su interior se definen los atributos (datos) y los métodos (comportamientos) que caracterizan a ese tipo de entidad. Puede imaginarse como el plano de una casa: especifica qué tendrá la casa y cómo funcionará, pero no es una casa real todavía. En lenguajes como Java, la clase es el punto central desde el que se organiza el código y se definen las estructuras que después se utilizarán en un programa.
+Una clase es una plantilla o modelo que describe cómo serán los objetos que se creen a partir de ella. En su interior se definen los atributos (datos) y los métodos (comportamientos) que caracterizan a ese tipo de entidad.
 
-Un objeto no es lo mismo que una clase. Mientras que la clase es el diseño, el objeto es el resultado concreto creado a partir de ese diseño. Cada objeto tiene su propio estado, puede ejecutar los métodos definidos en la clase y ocupa un lugar específico en memoria. Siguiendo la metáfora anterior, si la clase es el plano de una casa, el objeto sería la casa construida físicamente, con su propio color, muebles y particularidades. Esta diferencia entre diseño y ejemplar es fundamental para entender cómo funciona la programación orientada a objetos.
+La clase es el diseño, el objeto es el resultado concreto creado a partir de ese diseño. Cada objeto tiene su propio estado, puede ejecutar los métodos definidos en la clase y ocupa un lugar específico en memoria.
 
 Una instancia es simplemente otro nombre para un objeto creado a partir de una clase. Instanciar una clase significa construir un objeto real usando su definición. Por ejemplo, crear new Coche() en Java implica generar una instancia de la clase Coche. Cada una de estas instancias puede tener valores distintos en sus atributos; así, dos coches pueden ser de diferentes colores aunque provengan de la misma clase.
 
@@ -76,7 +76,7 @@ Sin embargo, la recolección de basura no es universal. Lenguajes como C++ dejan
 ## 7. ¿Qué es un método? ¿Qué es la **sobrecarga de métodos**? 
 
 ### Respuesta
-Un método es una operación asociada a una clase que define el comportamiento de sus objetos. Conceptualmente, es similar a una función en C, pero “vive” dentro de la clase y suele operar sobre el estado del objeto (sus atributos). En Java, los métodos de instancia actúan sobre cada objeto concreto, mientras que los métodos estáticos (static) pertenecen a la clase en general y se invocan sin necesidad de crear una instancia. Esta integración de datos (atributos) y operaciones (métodos) es lo que distingue a la POO de la programación estructurada.
+Un método es una operación asociada a una clase que define el comportamiento de sus objetos. Conceptualmente, es similar a una función en C, pero se define directamente dentro de la clase y suele operar sobre el estado del objeto (sus atributos). En Java, los métodos de instancia actúan sobre cada objeto concreto, mientras que los métodos estáticos (static) pertenecen a la clase en general y se invocan sin necesidad de crear una instancia. Esta integración de datos (atributos) y operaciones (métodos) es lo que distingue a la POO de la programación estructurada.
 
 La sobrecarga de métodos (method overloading) consiste en declarar varios métodos con el mismo nombre dentro de una misma clase, pero con listas de parámetros diferentes (distinto número, tipos o ambos). En Java, la sobrecarga se decide en tiempo de compilación (resolución estática): el compilador elige qué versión invocar según los tipos y la cantidad de argumentos. Es importante notar que no se puede sobrecargar solo cambiando el tipo de retorno; la firma relevante para la sobrecarga considera el nombre y la lista de parámetros. Esto difiere de la sobrescritura (overriding), que cambia la implementación de un método heredado y se resuelve en tiempo de ejecución (polimorfismo).
 
@@ -94,7 +94,7 @@ class Calculadora {
     public static int abs(int x) { return x < 0 ? -x : x; }
 }
 
-En este ejemplo, sumar está sobrecargado para manejar distintos tipos y cantidades de argumentos, mientras que abs ilustra un método estático. Desde el punto de vista de alguien que viene de C, puede verse como tener “varias funciones con el mismo nombre” seleccionadas por la firma, algo que en C habría que emular con nombres distintos o macros.
+En este ejemplo, sumar está sobrecargado para manejar distintos tipos y cantidades de argumentos, mientras que abs ilustra un método estático. Desde el punto de vista de alguien que viene de C, puede verse como tener “varias funciones con el mismo nombre” seleccionadas por la firma, algo que en C habría que emular con nombres distintos.
 
 ## 8. Ejemplo mínimo de clase en Java, que se llame Punto, con dos atributos, x e y, con un método que se llame `calculaDistanciaAOrigen`, que calcule la distancia a la posición 0,0. Por sencillez, los atributos deben tener visibilidad por defecto. Crea además un ejemplo de uso con una instancia y uso del método
 
