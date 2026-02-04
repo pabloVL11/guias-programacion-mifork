@@ -36,11 +36,9 @@ C++, C#, Java, Python
 ## 3. Los paradigmas anteriores a la POO, ¿Qué es la **programación estructurada**? y, todavía mejor, ¿Qué es la **programación modular**?
 
 ### Respuesta
-La programación estructurada es un paradigma que organiza el código en bloques lógicos utilizando únicamente tres estructuras básicas de control: secuencia, selección e iteración. Este enfoque surgió para combatir el uso excesivo de saltos incontrolados (gotos), muy comunes en lenguajes antiguos, que dificultaban entender y mantener los programas. Al estructurar el flujo de forma clara, se facilita la lectura y evita la aparición del llamado “código espagueti”. Para alguien que ha programado en C, este paradigma resulta muy familiar, ya que el lenguaje fue diseñado siguiendo precisamente estos principios.
+La programación estructurada es un paradigma que organiza el código en bloques lógicos utilizando únicamente tres estructuras básicas de control: secuencia, selección e iteración. Este enfoque surgió para combatir el uso excesivo de saltos incontrolados que dificultaban entender y mantener los programas.
 
-Por su parte, la programación modular representa un paso adicional dentro del paradigma estructurado. En lugar de escribir todo el programa como un único bloque, se divide la solución en módulos independientes, normalmente funciones o conjuntos de funciones agrupadas por responsabilidad. Cada módulo debe cumplir una tarea concreta, y el programa principal las utiliza como si fueran piezas de un ensamblaje. Esta separación mejora la reutilización, permite trabajar en equipo y reduce errores, porque los módulos se pueden probar por separado.
-
-En lenguajes como C, la modularidad se consigue utilizando funciones y organizando el código en distintos archivos .c y .h. Con ello, se puede pensar en cada módulo como una “caja negra”: importa qué hace, pero no es necesario saber cómo está implementado. Este principio sirvió de base conceptual para la posterior transición hacia la programación orientada a objetos, que lleva la idea de “caja negra” más lejos al encapsular datos y comportamientos dentro de entidades llamadas clases.
+Por su parte, la programación modular representa un paso adicional dentro del paradigma estructurado. En lugar de escribir todo el programa como un único bloque, se divide la solución en módulos independientes que se pueden comprender y revisar más fácilmente.
 
 ## 4. ¿Qué tres elementos definen a un objeto en programación orientada a objetos?
 
