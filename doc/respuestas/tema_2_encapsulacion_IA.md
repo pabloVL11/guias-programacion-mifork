@@ -145,47 +145,211 @@ En consecuencia, la encapsulación no se rompe al permitir este acceso, porque s
 ## 9. ¿Qué son los métodos "getter" y "setter" en los lenguajes orientados a objetos?
 
 ### Respuesta
+Los métodos getter y setter son procedimientos utilizados en lenguajes orientados a objetos para permitir un acceso controlado al estado interno de un objeto. Dado que los atributos suelen declararse como privados para proteger su integridad, los getters y setters actúan como una “puerta oficial” a través de la cual se leen o modifican esos valores. Esta forma de acceso evita exponer directamente los datos, manteniendo así la encapsulación como principio central del diseño orientado a objetos.
+
+Un getter (o accesor) es un método que devuelve el valor de un atributo privado. Su función es permitir leer el estado de forma segura, sin otorgar permiso para cambiarlo directamente. Por su parte, un setter (o mutador) permite modificar el valor de un atributo, pero lo hace de forma controlada: puede validar, restringir, transformar o aplicar reglas antes de aceptar la modificación. Esto evita que el objeto adopte estados no válidos o inconsistentes, algo que podría romper las invariantes de la clase.
+
+Además, el uso de getters y setters favorece la mantenibilidad, ya que permite cambiar la implementación interna sin alterar la interfaz pública. Por ejemplo, aunque el atributo deje de almacenarse directamente y pase a calcularse, el getter podría seguir funcionando del mismo modo hacia el exterior. De esta manera, los objetos continúan ofreciendo una interfaz coherente y estable, incluso si su estructura interna evoluciona con el tiempo.
 
 
 ## 10. Cuando nos referimos a que la ocultación de información mejora la "seguridad" del programa, ¿nos referimos a que no pueda ser "hackeado"?
 
 ### Respuesta
+No, cuando en POO se afirma que la ocultación de información mejora la “seguridad”, no se hace referencia a seguridad frente a hackeos, ataques externos o vulnerabilidades de ciberseguridad. El término “seguridad” se entiende en un sentido interno al diseño del software, y tiene que ver con evitar errores lógicos, inconsistencias y usos indebidos de los objetos por parte de otras partes del propio programa. De esta forma, la ocultación garantiza que el estado de un objeto no pueda ser alterado de manera inapropiada, y que todas las modificaciones pasen por métodos controlados que mantienen las invariantes de la clase.
+
+Este tipo de seguridad implica que el objeto se protege frente a manipulaciones accidentales o incorrectas generadas por desarrolladores u otros módulos del programa. Al restringirse el acceso directo a los datos mediante atributos privados y métodos públicos controlados, se limita la posibilidad de romper las reglas internas que definen un estado válido. Esto es especialmente útil en sistemas grandes, donde las interacciones entre componentes pueden ser complejas y propensas a errores si no existen estos mecanismos de protección.
+
+En cambio, la seguridad frente a hackeos o ataques externos —la denominada seguridad informática o ciberseguridad— requiere medidas completamente distintas, relacionadas con criptografía, control de acceso, validación de entradas externas, políticas de autenticación, etc. La encapsulación no protege frente a este tipo de amenazas externas, ya que su ámbito es puramente estructural y pertenece al diseño del código. Por tanto, la “seguridad” que proporciona la ocultación es organizativa y lógica, no de defensa contra atacantes.
 
 
 ## 11. ¿Qué diferencia hay entre **miembro de instancia** y **miembro de clase**? ¿Los miembros de clase también se pueden ocultar?
 
 ### Respuesta
+Un miembro de instancia es aquel que pertenece a cada objeto individual creado a partir de una clase. Cada instancia mantiene su propia copia independiente de esos atributos y métodos no estáticos, de modo que el estado varía entre objetos. En la clase Punto, por ejemplo, las coordenadas x e y son miembros de instancia: cada punto concreto almacena sus propios valores, y los métodos no estáticos operan sobre ese estado particular. Esta característica permite que distintos objetos representen información distinta dentro del mismo programa, aunque provengan de la misma definición de clase.
+
+Un miembro de clase, en cambio, es compartido por todas las instancias de la misma clase. En Java se declaran con la palabra clave static y existen incluso aunque no se cree ningún objeto. Esto incluye tanto atributos como métodos. Por ejemplo, un contador de cuántos objetos se han creado es típicamente un atributo estático. Dado que el valor es común, una modificación afecta a todas las instancias, y su uso responde a necesidades globales más que a características particulares de cada objeto.
+
+Los miembros de clase también pueden ocultarse, utilizando los mismos modificadores de acceso que para los miembros de instancia. Un atributo estático puede declararse private para impedir que código externo lo modifique o lo lea directamente. De este modo, se mantiene la encapsulación incluso para la parte compartida de la clase, permitiendo exponer solo métodos de acceso controlado (por ejemplo, un getter público que devuelva el valor del atributo estático). Esta posibilidad refuerza la idea de que la ocultación de información actúa a nivel de clase, con independencia de que el miembro sea de instancia o estático.
 
 
 ## 12. Brevemente: ¿Tiene sentido que los constructores sean privados?
 
 ### Respuesta
+Sí, tiene sentido que los constructores sean privados, aunque solo en situaciones concretas. Un constructor privado impide que el código externo cree instancias libremente, lo que permite a la clase controlar completamente cuándo y cómo se generan sus objetos. Esto resulta útil cuando la creación de instancias debe seguir reglas estrictas o cuando se desea que solo exista un número limitado de objetos posibles. Un ejemplo típico es el patrón Singleton, donde solo puede existir una única instancia global y el constructor privado evita que se creen más desde fuera de la clase.
 
+También es habitual usar constructores privados en clases que proporcionan únicamente métodos estáticos y no necesitan ser instanciadas, como ocurre con ciertas utilidades matemáticas o bibliotecas auxiliares. En estos casos, marcar el constructor como privado deja claro que la clase no representa objetos y que su uso previsto es puramente funcional. Además, puede emplearse esta técnica para obligar a utilizar métodos de fábrica (factory methods), permitiendo ocultar detalles de creación o devolver subtipos sin que el usuario de la clase lo note.
+
+Por tanto, aunque no es lo más común en clases orientadas a representar entidades, el uso de constructores privados tiene pleno sentido cuando se busca modularidad, control en la creación de objetos o un diseño más claro en los patrones arquitectónicos.
 
 ## 13. ¿Cómo se indican los **miembros de clase** en Java? Pon un ejemplo, en la clase `Punto` definida anteriormente, para que incluya miembros de clase que permitan saber cuáles son los valores `x` e `y` máximos que se han establecido en todos los puntos que se hayan creado hasta el momento.
 
 ### Respuesta
+En Java, los miembros de clase se indican con la palabra clave static. Esto hace que el miembro pertenezca a la clase y no a cada instancia concreta: existe una única copia compartida por todos los objetos (o incluso sin haber creado ninguno). Pueden ser tanto atributos como métodos estáticos, y se les puede aplicar igualmente la ocultación de información (private) y exponer una interfaz controlada mediante métodos estáticos públicos.
+
+A continuación, se amplía la clase Punto para incluir dos atributos estáticos privados que registran los valores máximos globales de x e y vistos hasta el momento. Se actualizan en el constructor (y también en los setters si se activan), y se exponen mediante getters estáticos públicos que forman parte de la interfaz de clase. De este modo, se mantiene la encapsulación y se ofrece una manera coherente de consultar estos agregados globales.
+
+public class Punto {
+    // Estado de instancia (oculto)
+    private double x;
+    private double y;
+
+    // Miembros de clase (compartidos por todas las instancias)
+    private static double maxXGlobal = Double.NEGATIVE_INFINITY;
+    private static double maxYGlobal = Double.NEGATIVE_INFINITY;
+
+    // Constructor: actualiza máximos globales
+    public Punto(double x, double y) {
+        this.x = x;
+        this.y = y;
+        actualizarMaximos(x, y);
+    }
+
+    // Getters de instancia
+    public double getX() { return x; }
+    public double getY() { return y; }
+
+    // (Opcional) Setters de instancia: mantienen los máximos si se permite mutación
+    public void setX(double x) {
+        this.x = x;
+        actualizarMaximos(this.x, this.y);
+    }
+
+    public void setY(double y) {
+        this.y = y;
+        actualizarMaximos(this.x, this.y);
+    }
+
+    // Comportamiento de instancia
+    public double calcularDistanciaAOrigen() {
+        return Math.sqrt(x * x + y * y);
+    }
+
+    public double calcularDistanciaAPunto(Punto otro) {
+        double dx = this.x - otro.x;
+        double dy = this.y - otro.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // Métodos de clase (interfaz pública para consultar agregados globales)
+    public static double getMaxXGlobal() { return maxXGlobal; }
+    public static double getMaxYGlobal() { return maxYGlobal; }
+
+    // Detalle interno (oculto) para mantener los máximos globales
+    private static void actualizarMaximos(double x, double y) {
+        if (x > maxXGlobal) maxXGlobal = x;
+        if (y > maxYGlobal) maxYGlobal = y;
+    }
+}
+
+En esta versión, maxXGlobal y maxYGlobal son miembros de clase (static) y están ocultos (private); solo pueden consultarse mediante getMaxXGlobal() y getMaxYGlobal(). De este modo, se separa claramente la interfaz de instancia (operaciones sobre un punto concreto) de la interfaz de clase (consultas agregadas sobre todos los puntos). Si se necesitara concurrencia real, podría considerarse sincronización o tipos atómicos; para un contexto introductorio, esta solución captura adecuadamente la idea de miembros de clase y su encapsulación.
 
 
 ## 14. Como sería un método factoría dentro de la clase `Punto` para construir un `Punto` a partir de dos coordenadas, pero que las redondee al entero más cercano. Escribe sólo el código del método, no toda la clase ¿Has usado `static`? 
 
 ### Respuesta
+// Método factoría estático: redondea al entero más cercano y crea un Punto
+public static Punto crearRedondeando(double x, double y) {
+    double rx = (double) Math.round(x); // half-up: 2.5 -> 3, -2.5 -> -2
+    double ry = (double) Math.round(y);
+    return new Punto(rx, ry);
+}
+
+Sí: se usa `static` (es un método de clase/factoría).
 
 
 ## 15. Cambia la implementación de `Punto`. En vez de dos `double`, emplea un array interno de dos posiciones, intentando no modificar la interfaz pública de la clase.
 
 ### Respuesta
+A continuación se muestra una posible reimplementación de Punto que sustituye los dos double por un array interno de longitud 2 (coords[0] = x, coords[1] = y) sin modificar la interfaz pública ya usada hasta ahora (constructor, getters, setters opcionales, métodos de instancia y los miembros de clase para máximos). De este modo, el contrato público se mantiene estable y cualquier código cliente no necesita cambios.
+
+Esta variación ilustra cómo la ocultación de información permite alterar la representación interna sin afectar a los usuarios de la clase. El cambio queda confinado a la implementación privada: métodos públicos siguen funcionando igual, y las invariantes y agregados globales se conservan. Como consideración adicional, se evita exponer el array y se copian valores cuando procede, para mantener la encapsulación.
+
+public class Punto {
+    // Representación interna: array de dos posiciones (0 -> x, 1 -> y)
+    private final double[] coords = new double[2];
+
+    // Miembros de clase (idénticos a la versión previa)
+    private static double maxXGlobal = Double.NEGATIVE_INFINITY;
+    private static double maxYGlobal = Double.NEGATIVE_INFINITY;
+
+    // Constructor público (misma firma)
+    public Punto(double x, double y) {
+        coords[0] = x;
+        coords[1] = y;
+        actualizarMaximos(coords[0], coords[1]);
+    }
+
+    // Getters públicos (misma interfaz)
+    public double getX() { return coords[0]; }
+    public double getY() { return coords[1]; }
+
+    // (Opcional) Setters públicos (misma interfaz, si se permiten mutaciones)
+    public void setX(double x) {
+        coords[0] = x;
+        actualizarMaximos(coords[0], coords[1]);
+    }
+
+    public void setY(double y) {
+        coords[1] = y;
+        actualizarMaximos(coords[0], coords[1]);
+    }
+
+    // Comportamiento público (misma interfaz)
+    public double calcularDistanciaAOrigen() {
+        return Math.sqrt(coords[0] * coords[0] + coords[1] * coords[1]);
+    }
+
+    public double calcularDistanciaAPunto(Punto otro) {
+        double dx = this.coords[0] - otro.coords[0]; // acceso válido: misma clase
+        double dy = this.coords[1] - otro.coords[1];
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // Método factoría ilustrativo (mantenido si ya se ofrecía en la interfaz pública)
+    public static Punto crearRedondeando(double x, double y) {
+        double rx = (double) Math.round(x);
+        double ry = (double) Math.round(y);
+        return new Punto(rx, ry);
+    }
+
+    // Interfaz de clase para consultar agregados globales (sin cambios)
+    public static double getMaxXGlobal() { return maxXGlobal; }
+    public static double getMaxYGlobal() { return maxYGlobal; }
+
+    // Detalle interno (oculto)
+    private static void actualizarMaximos(double x, double y) {
+        if (x > maxXGlobal) maxXGlobal = x;
+        if (y > maxYGlobal) maxYGlobal = y;
+    }
+}
+``
+Con esta versión se mantiene exactamente el mismo conjunto de miembros públicos: el constructor, getX(), getY(), setX(), setY() (si se desean), calcularDistanciaAOrigen(), calcularDistanciaAPunto(Punto), el método factoría crearRedondeando(...) y los métodos estáticos getMaxXGlobal() y getMaxYGlobal(). La única diferencia es la representación privada del estado, que ahora se apoya en un array, demostrando que la encapsulación permite cambiar el “cómo” sin tocar el “qué” de la interfaz pública.
+
+Como nota de diseño, utilizar un array puede ser útil para extensiones (p. ej., pasar a 3D) o para operar de forma más uniforme sobre coordenadas, aunque se pierde algo de auto-documentación frente a campos con nombre (x, y). Esto se compensa con getters y setters claros, y con constantes o comentarios que expliciten el significado de cada posición del array.
 
 
 ## 16. Si un atributo va a tener un método "getter" y "setter" públicos, ¿no es mejor declararlo público? ¿Cuál es la convención más habitual sobre los atributos, que sean públicos o privados? ¿Tiene esto algo que ver con las "invariantes de clase"?
 
 ### Respuesta
+En primer lugar, no es mejor declarar un atributo público solo porque tenga un getter y un setter. Aunque parezca que exponerlos públicamente es equivalente, en realidad no lo es. Declarar el atributo como público significaría renunciar totalmente al control sobre su acceso y modificación, dejando abierta la posibilidad de que cualquier parte del programa pueda alterarlo sin restricciones. En cambio, mantenerlo privado permite interponer lógica dentro de los métodos setter y getter, como validaciones, restricciones, conversiones o comprobaciones de invariantes. El atributo público impediría añadir esta lógica sin romper la compatibilidad con código existente.
+
+La convención más habitual en la mayoría de lenguajes orientados a objetos, incluyendo Java, es declarar todos los atributos como privados y exponer únicamente los métodos necesarios (getters, setters, o ningún método si no se desea permitir acceso externo). Esta práctica forma parte del principio de encapsulación, que busca aislar la representación interna para poder modificarla sin afectar a la interfaz pública. Incluso en clases muy simples, se prefiere usar atributos privados, ya que evita dependencias externas hacia detalles que podrían cambiar en el futuro.
+
+Este tema tiene una relación directa con las invariantes de clase. Una invariante es una condición que debe cumplirse siempre para que el objeto esté en un estado válido. Los setters permiten verificar estas condiciones cada vez que se actualiza un atributo, lo que garantiza la coherencia interna del objeto. Si los atributos fueran públicos, no habría manera de controlar estas modificaciones ni de asegurarse de que se respetan las invariantes, lo que podría llevar a estados inconsistentes o errores lógicos en el programa. Así, la ocultación de información es el mecanismo que permite proteger y salvaguardar esas invariantes.
+
+En conjunto, la práctica recomendada es clara: atributos privados, interfaz pública mínima y controlada, y uso de getters y setters solo cuando realmente se necesitan. Esto no solo mejora la robustez, sino que también permite diseñar objetos coherentes, flexibles y resistentes a cambios futuros.
 
 
 ## 17. ¿Qué significa que una clase sea **inmutable**? ¿qué es un método modificador? ¿Un método modificador es siempre un "setter"? ¿Tiene ventajas que una clase sea inmutable?
 
 ### Respuesta
+Una clase inmutable es aquella cuyo estado no puede modificarse una vez creada una instancia. Esto implica que todos sus atributos representan un valor fijo desde el momento de la construcción y no existen métodos que alteren ese estado interno. Para lograrlo, los atributos suelen declararse private y final, y no se ofrecen setters ni métodos que cambien los valores. La inmutabilidad facilita razonar sobre el comportamiento del objeto, ya que se garantiza que, tras construirse, permanecerá siempre en un estado válido y consistente.
 
+Un método modificador es cualquier método que cambie el estado interno del objeto. Su función es alterar el valor de uno o varios atributos, ya sea directamente o a través de operaciones más complejas. Un método modificador no es necesariamente un setter: un setter es un caso particular y muy simple de método modificador, pero existen muchos otros métodos que también modifican el estado aunque no se llamen setAlgo ni actúen sobre un único atributo. Por ejemplo, un método que traslada un punto sumando un desplazamiento a sus coordenadas, o uno que normaliza los valores de un objeto, serían igualmente métodos modificadores.
+
+La inmutabilidad ofrece varias ventajas importantes. En primer lugar, hace más fácil garantizar las invariantes de clase, ya que ninguna operación posterior puede romperlas: si el constructor crea un objeto válido, ese objeto seguirá siendo válido siempre. Además, las clases inmutables son intrínsecamente más seguras en contextos de concurrencia, porque varios hilos pueden compartirlas sin riesgo de interferencias o condiciones de carrera. También simplifican el diseño y la depuración, al evitar efectos colaterales indeseados provocados por modificaciones del estado.
+
+Otra ventaja destacada es la posibilidad de reutilizar instancias sin temor a que cambien inesperadamente, lo que mejora el rendimiento en ciertos escenarios y permite aplicar técnicas como el caching interno. Sin embargo, la inmutabilidad no siempre es necesaria ni conveniente: en objetos que representan entidades que cambian con el tiempo (como posiciones, contadores o estados de juego), puede ser más práctico permitir modificaciones controladas. En todo caso, conocer la diferencia entre objetos mutables e inmutables resulta clave para diseñar clases robustas, claras y coherentes.
 
 ## 18. ¿Es recomendable incluir métodos "setter" siempre y como convención?
 
