@@ -156,20 +156,112 @@ Este patrón se utiliza para valores fijos que deben ser accesibles globalmente,
 
 ### Respuesta
 
+Para compilar y ejecutar un programa Java desde la línea de comandos se utilizan dos herramientas básicas: javac y java. El proceso habitual consiste primero en compilar el archivo .java para generar uno o más archivos .class que contienen el bytecode. Por ejemplo, si se tiene un archivo Hola.java con una clase pública Hola, basta con escribir en la terminal:
+
+javac Hola.java     # Compila y genera Hola.class
+java Hola           # Ejecuta la clase que contiene main
+``
+El primer comando analiza el código, comprueba errores y emite el bytecode. El segundo comando no ejecuta directamente el archivo .class, sino que pone en marcha la máquina virtual, que interpreta ese bytecode o lo compila dinámicamente durante la ejecución.
+
+Java se considera un lenguaje compilado e interpretado a la vez. Se compila porque el código fuente .java se transforma primero en bytecode independiente de la plataforma, y se interpreta porque ese bytecode es posteriormente ejecutado por la Máquina Virtual de Java (JVM). Esta combinación ofrece portabilidad, ya que el mismo archivo .class puede ejecutarse en cualquier sistema que disponga de una JVM compatible, independientemente del sistema operativo o del tipo de procesador.
+
+La máquina virtual es un entorno de ejecución que actúa como capa intermedia entre el programa y el sistema operativo. Su responsabilidad principal es ejecutar el bytecode de manera segura, gestionando memoria, excepciones, hilos y otros recursos. Gracias a esta abstracción, Java garantiza que el programa se comporte igual en todas las plataformas, lo cual no ocurre en lenguajes nativos como C o C++ donde se generan binarios específicos por arquitectura.
+
+El bytecode es un conjunto de instrucciones de nivel intermedio que generan los compiladores de Java. No es código máquina real, pero está muy cercano a él. Cada archivo .class contiene bytecode para una única clase, de modo que un programa puede generar múltiples ficheros .class al compilarse. La JVM interpreta o compila este bytecode a código nativo en tiempo de ejecución mediante técnicas como JIT compilation (Just-In-Time), permitiendo un rendimiento competitivo sin sacrificar portabilidad.
+
 
 ## 11. En el código anterior de la clase `Punto` ¿Qué es `new`? ¿Qué es un **constructor**? Pon un ejemplo de constructor en una clase `Empleado` que tenga DNI, nombre y apellidos
 
 ### Respuesta
 
+En Java, new es el operador de creación de objetos. Su función es reservar memoria en el heap para una nueva instancia de la clase indicada y devolver una referencia a esa instancia. A diferencia de C, donde podría utilizarse malloc y luego inicializar manualmente, en Java new invoca automáticamente un constructor de la clase para dejar el objeto en un estado válido desde el primer momento. Por ejemplo, new Punto(3, 4) crea un objeto Punto y llama a su constructor con los argumentos 3 y 4.
+
+Un constructor es un método especial cuyo nombre coincide con el de la clase y no tiene tipo de retorno (ni siquiera void). Se ejecuta justo después de reservar la memoria con new y se utiliza para inicializar los atributos del objeto. Si no se define ninguno, Java proporciona un constructor por defecto sin parámetros. Es habitual emplear this dentro del constructor para distinguir entre los parámetros y los atributos de instancia. También pueden existir constructores sobrecargados con diferentes listas de parámetros, permitiendo varias formas de crear un objeto en función de la información disponible.
+
+A continuación se muestra un ejemplo de una clase Empleado con tres atributos (dni, nombre, apellidos) y un constructor que inicializa dichos campos. Se incluye además un ejemplo de uso en main para ilustrar la instanciación mediante new:
+
+// Archivo: Empleado.java
+public class Empleado {
+    String dni;
+    String nombre;
+    String apellidos;
+
+    // Constructor que inicializa todos los atributos
+    public Empleado(String dni, String nombre, String apellidos) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+    }
+
+    // Método auxiliar para mostrar datos (opcional)
+    public String descripcion() {
+        return nombre + " " + apellidos + " (" + dni + ")";
+    }
+
+    public static void main(String[] args) {
+        // Creación de una instancia con 'new' que llama al constructor
+        Empleado e = new Empleado("12345678A", "Ana", "García López");
+        System.out.println(e.descripcion());
+    }
+}
+
+En este ejemplo, new Empleado(...) reserva memoria y ejecuta el constructor para dejar el objeto listo.
 
 ## 12. ¿Qué es la referencia `this`? ¿Se llama igual en todos los lenguajes? Pon un ejemplo del uso de `this` en la clase `Punto`
 
 ### Respuesta
 
+La referencia this es un identificador especial disponible dentro de una clase que hace referencia a la instancia actual sobre la que se está ejecutando el método o el constructor. Sirve para acceder a los atributos y métodos de ese objeto concreto y, muy comúnmente, para desambiguar entre nombres de parámetros y nombres de atributos cuando coinciden. En un constructor, this ayuda a dejar claro que se está asignando al campo del objeto (por ejemplo, this.x = x;).
+
+No se denomina ni se comporta igual en todos los lenguajes. En Java y C++ la palabra es this y se refiere implícitamente al objeto actual; en C# también es this. En Python no existe palabra reservada equivalente: se utiliza el primer parámetro de los métodos de instancia, por convención llamado self, pero no es una palabra clave del lenguaje. En JavaScript la palabra this existe, pero su valor depende del contexto de invocación (función libre, método, bind/call/apply, funciones flecha, etc.), por lo que su semántica difiere bastante de Java y puede resultar más confusa.
+
+A continuación, un ejemplo de uso de this en la clase Punto, mostrando desambiguación en el constructor y una llamada encadenada a un método de instancia:
+
+// Archivo: Punto.java
+class Punto {
+    double x; // visibilidad por defecto
+    double y;
+
+    // Constructor: desambiguación entre parámetros y atributos
+    Punto(double x, double y) {
+        this.x = x;   // 'this.x' = atributo; 'x' = parámetro
+        this.y = y;
+    }
+
+    double calculaDistanciaAOrigen() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    // Método que traslada el punto y devuelve la propia instancia (fluido)
+    Punto trasladar(double dx, double dy) {
+        this.x += dx;   // uso explícito de 'this' (opcional aquí, pero claro)
+        this.y += dy;
+        return this;    // devuelve la instancia actual
+    }
+}
+
+// Ejemplo de uso
+class Demo {
+    public static void main(String[] args) {
+        Punto p = new Punto(3, 4);
+        double d1 = p.calculaDistanciaAOrigen();       // 5.0
+        double d2 = p.trasladar(-3, -4).calculaDistanciaAOrigen(); // 0.0
+        System.out.println(d1 + " -> " + d2);
+    }
+}
+
+En el ejemplo, this.x y this.y identifican inequívocamente los campos del objeto, evitando confusiones con los parámetros del constructor. Además, return this; ilustra que this es la referencia a la instancia actual, lo que permite encadenar operaciones (“fluent API”) sin crear nuevos objetos si no se desea.
+
 
 ## 13. Añade ahora otro nuevo método que se llame `distanciaA`, que reciba un `Punto` como parámetro y calcule la distancia entre `this` y el punto proporcionado
 
 ### Respuesta
+
+Para calcular la distancia entre el objeto actual (this) y otro punto recibido como parámetro, basta con aplicar la fórmula de la distancia euclidiana entre dos coordenadas en el plano. En programación orientada a objetos, este método expresa claramente que es el propio objeto quien conoce su posición y sabe calcular la distancia respecto a otro. Desde el punto de vista conceptual, este método utiliza this para acceder a los atributos del punto actual y el parámetro para acceder a los del punto externo, de manera similar a cómo en C se pasaría un struct a una función, pero integrado dentro de la propia clase.
+
+El uso de un parámetro de tipo Punto ilustra cómo una clase puede interactuar consigo misma, lo cual es habitual en geometría, grafos, listas enlazadas u otros escenarios donde los objetos del mismo tipo se relacionan entre sí. Además, este método complementa al ya existente calculaDistanciaAOrigen, mostrando cómo se pueden definir operaciones tanto relativas al origen como relativas a otro objeto. Aunque el uso explícito de this no siempre es obligatorio, en este contexto mejora la claridad al dejar claro qué coordenadas pertenecen a cada punto.
+
+Aquí tienes la versión actualizada de la clase con el nuevo método distanciaA:
 
 
 ## 14. El paso del `Punto` como parámetro a un método, es **por copia** o **por referencia**, es decir, si se cambia el valor de algún atributo del punto pasado como parámetro, dichos cambios afectan al objeto fuera del método? ¿Qué ocurre si en vez de un `Punto`, se recibiese un entero (`int`) y dicho entero se modificase dentro de la función? 
