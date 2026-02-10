@@ -413,14 +413,12 @@ En términos de encapsulación, los enumerados en Java ofrecen varias ventajas. 
 
 Finalmente, los enumerados también refuerzan la seguridad del código al sustituir valores numéricos o cadenas que podrían escribirse de forma incorrecta. Gracias a la encapsulación y al tipado fuerte, el compilador detecta errores de uso mucho antes y evita estados no válidos
 
-## 23. Crea un tipo enumerado en Java que se llame `Mes`, con doce posibles instancias y que además proporcione métodos para obtener cuántos días tiene ese mes, el ordinal de ese mes en el año (1-12), empleando atributos privados y constructores del tipo enumerado. Añade además cuatro métodos para devolver si ese mes tiene algunos días de invierno, primavera, verano u otoño, indicando con un booleano el hemisferio (norte o sur, parámetro `enHemisferioNorte`). Es decir: `esDePrimavera(boolean esHemisferioNorte)`, `esDeVerano(boolean esHemisferioNorte)`, `esDeOtoño(boolean esHemisferioNorte)`, `esDeInvierno(boolean esHemisferioNorte)`
+## 23. Crea un tipo enumerado en Java que se llame `Mes`, con doce posibles instancias y que además proporcione métodos para obtener cuántos días tiene ese mes, el ordinal de ese mes en el año (1-12), empleando atributos privados y constructores del tipo enumerado.
 
 ### Respuesta
-A continuación se define el tipo enumerado Mes con las doce instancias del año. Cada constante almacena días (asumiendo años no bisiestos, 28 para febrero) y su ordinal (1–12) mediante atributos privados y un constructor privado. Además, se implementan los métodos solicitados: getDias(), getOrdinal(), y los cuatro predicados estacionales que consideran el hemisferio indicado por parámetro.
-
 public enum Mes {
     ENERO(31, 1),
-    FEBRERO(28, 2),   // simplificado: no considera años bisiestos
+    FEBRERO(28, 2),   // simplificación: año no bisiesto
     MARZO(31, 3),
     ABRIL(30, 4),
     MAYO(31, 5),
@@ -447,54 +445,83 @@ public enum Mes {
     public int getOrdinal() {
         return ordinalDelAnio; // 1..12
     }
+}
+
+Este enum define doce instancias únicas (una por mes) y encapsula dos atributos privados e inmutables: el número de días (asumiendo año no bisiesto) y el ordinal dentro del año. El constructor es privado por definición en los enumerados, lo que impide crear valores fuera del conjunto cerrado, y los métodos getDias() y getOrdinal() constituyen la interfaz pública para consultar la información sin exponer la representación interna.
+
+## 24. Añade a la clase `Mes` del ejercicio anterior cuatro métodos para devolver si ese mes tiene algunos días de invierno, primavera, verano u otoño, indicando con un booleano el hemisferio (norte o sur, parámetro `enHemisferioNorte`). Es decir: `esDePrimavera(boolean esHemisferioNorte)`, `esDeVerano(boolean esHemisferioNorte)`, `esDeOtoño(boolean esHemisferioNorte)`, `esDeInvierno(boolean esHemisferioNorte)`
+
+### Respuesta
+public enum Mes {
+    ENERO(31, 1),
+    FEBRERO(28, 2),
+    MARZO(31, 3),
+    ABRIL(30, 4),
+    MAYO(31, 5),
+    JUNIO(30, 6),
+    JULIO(31, 7),
+    AGOSTO(31, 8),
+    SEPTIEMBRE(30, 9),
+    OCTUBRE(31, 10),
+    NOVIEMBRE(30, 11),
+    DICIEMBRE(31, 12);
+
+    private final int dias;
+    private final int ordinalDelAnio;
+
+    private Mes(int dias, int ordinalDelAnio) {
+        this.dias = dias;
+        this.ordinalDelAnio = ordinalDelAnio;
+    }
+
+    public int getDias() {
+        return dias;
+    }
+
+    public int getOrdinal() {
+        return ordinalDelAnio;
+    }
+
+    // ---- MÉTODOS ESTACIONALES ----
 
     public boolean esDePrimavera(boolean esHemisferioNorte) {
         if (esHemisferioNorte) {
-            // Norte: primavera = marzo, abril, mayo
-            return esUnoDe(MARZO, ABRIL, MAYO);
+            // Norte: marzo, abril, mayo
+            return this == MARZO || this == ABRIL || this == MAYO;
         } else {
-            // Sur: primavera = septiembre, octubre, noviembre
-            return esUnoDe(SEPTIEMBRE, OCTUBRE, NOVIEMBRE);
+            // Sur: septiembre, octubre, noviembre
+            return this == SEPTIEMBRE || this == OCTUBRE || this == NOVIEMBRE;
         }
     }
 
     public boolean esDeVerano(boolean esHemisferioNorte) {
         if (esHemisferioNorte) {
-            // Norte: verano = junio, julio, agosto
-            return esUnoDe(JUNIO, JULIO, AGOSTO);
+            // Norte: junio, julio, agosto
+            return this == JUNIO || this == JULIO || this == AGOSTO;
         } else {
-            // Sur: verano = diciembre, enero, febrero
-            return esUnoDe(DICIEMBRE, ENERO, FEBRERO);
+            // Sur: diciembre, enero, febrero
+            return this == DICIEMBRE || this == ENERO || this == FEBRERO;
         }
     }
 
     public boolean esDeOtoño(boolean esHemisferioNorte) {
         if (esHemisferioNorte) {
-            // Norte: otoño = septiembre, octubre, noviembre
-            return esUnoDe(SEPTIEMBRE, OCTUBRE, NOVIEMBRE);
+            // Norte: septiembre, octubre, noviembre
+            return this == SEPTIEMBRE || this == OCTUBRE || this == NOVIEMBRE;
         } else {
-            // Sur: otoño = marzo, abril, mayo
-            return esUnoDe(MARZO, ABRIL, MAYO);
+            // Sur: marzo, abril, mayo
+            return this == MARZO || this == ABRIL || this == MAYO;
         }
     }
 
     public boolean esDeInvierno(boolean esHemisferioNorte) {
         if (esHemisferioNorte) {
-            // Norte: invierno = diciembre, enero, febrero
-            return esUnoDe(DICIEMBRE, ENERO, FEBRERO);
+            // Norte: diciembre, enero, febrero
+            return this == DICIEMBRE || this == ENERO || this == FEBRERO;
         } else {
-            // Sur: invierno = junio, julio, agosto
-            return esUnoDe(JUNIO, JULIO, AGOSTO);
+            // Sur: junio, julio, agosto
+            return this == JUNIO || this == JULIO || this == AGOSTO;
         }
-    }
-
-    // Utilidad privada para comprobar pertenencia
-    private boolean esUnoDe(Mes... meses) {
-        for (Mes m : meses) {
-            if (this == m) return true;
-        }
-        return false;
     }
 }
 
-Este diseño aprovecha la encapsulación del enum en Java: los atributos (dias, ordinalDelAnio) son privados e inmutables, el constructor es privado por definición (no se pueden crear más instancias), y se expone una interfaz pública clara con consultas bien definidas.
