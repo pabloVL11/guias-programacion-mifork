@@ -234,27 +234,162 @@ Como consecuencia práctica, cualquier clase como Soldado, Artillero o Zapador e
 
 ### Respuesta
 
+La herencia múltiple es un mecanismo mediante el cual una clase puede heredar directamente de más de una clase base. Esto implicaría que la subclase adquiere estado y comportamiento de varios padres al mismo tiempo. Aunque este enfoque puede parecer potente, introduce problemas conceptuales y técnicos, como el conocido problema del diamante, donde surge ambigüedad sobre de qué clase base procede un atributo o método concreto cuando ambas lo definen.
+
+No todos los lenguajes orientados a objetos permiten herencia múltiple de clases. Algunos, como C++, la admiten con reglas adicionales para resolver conflictos, mientras que otros la prohíben deliberadamente para mantener el modelo más simple y seguro. La experiencia ha demostrado que la herencia múltiple de implementación puede complicar el diseño, el mantenimiento y la comprensión del código, especialmente en jerarquías grandes.
+
+En Java no existe herencia múltiple de clases. Una clase solo puede extender (extends) una única clase base. Esta restricción es una decisión de diseño del lenguaje para evitar ambigüedades y simplificar el modelo de herencia. Por tanto, una clase como Soldado solo podría tener una superclase directa, y cualquier subtipo (Artillero, Zapador) seguiría una jerarquía lineal de herencia.
+
+No obstante, Java ofrece una alternativa controlada mediante las interfaces, que permiten una forma de herencia múltiple de comportamiento (pero no de estado). Una clase puede implementar múltiples interfaces, comprometiéndose a proporcionar ciertos métodos sin heredar atributos. De este modo, Java combina un modelo de herencia simple de clases con múltiples contratos de comportamiento, logrando un equilibrio entre flexibilidad y seguridad en el diseño orientado a objetos.
 
 ## 9. Las excepciones en los lenguajes orientados a objetos son objetos. Por tanto, se pueden crear excepciones personalizadas. Pon un ejemplo en Java de una excepción personalizada (`UsuarioNoEncontradoException`), que sea *no controlada* y que además este compuesto con un `Usuario`, para saber qué `Usuario` dio el problema. Permite además que se pueda incluir la causa, es decir, sobrecarga el constructor para tener una versión que permita añadir la causa subyacente. 
 
 ### Respuesta
+
+En los lenguajes orientados a objetos, las excepciones son también objetos, lo que permite aplicar sobre ellas los mismos principios que al resto de clases: encapsulación, herencia y composición. Crear excepciones personalizadas resulta útil para expresar errores del dominio del problema con mayor claridad que usando excepciones genéricas. En Java, una excepción personalizada se define creando una nueva clase que herede de Exception o de RuntimeException.
+
+Cuando una excepción hereda de RuntimeException, se considera una excepción no controlada (unchecked exception). Esto significa que el compilador no obliga a capturarla ni a declararla en la cláusula throws. Este tipo de excepciones se utiliza normalmente para errores de programación o situaciones anómalas que no se espera que el llamador maneje de forma inmediata, como puede ser que un usuario solicitado no exista.
+
+Además, una excepción puede estar compuesta con otros objetos, almacenando información adicional sobre el error. En este caso, incluir un objeto Usuario dentro de la excepción permite conocer qué usuario concreto provocó el problema. Java también permite encadenar excepciones mediante una causa subyacente (cause), lo que resulta muy útil para no perder información cuando una excepción es consecuencia de otra.
+
+A continuación se muestra un ejemplo de excepción personalizada no controlada (UsuarioNoEncontradoException), compuesta con un Usuario y con constructores sobrecargados que permiten incluir o no la causa original del error:
+
+class Usuario {
+    private String nombre;
+
+    public Usuario(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+}
+
+class UsuarioNoEncontradoException extends RuntimeException {
+    private Usuario usuario;
+
+    public UsuarioNoEncontradoException(Usuario usuario) {
+        super("Usuario no encontrado: " + usuario.getNombre());
+        this.usuario = usuario;
+    }
+
+    public UsuarioNoEncontradoException(Usuario usuario, Throwable cause) {
+        super("Usuario no encontrado: " + usuario.getNombre(), cause);
+        this.usuario = usuario;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+}
+
+Este diseño permite lanzar la excepción con información rica sobre el error, acceder al usuario problemático si es necesario y, al mismo tiempo, encadenar excepciones para facilitar el diagnóstico y la depuración del sistema.
 
 
 ## 10. Herencia vs. Composición. Se dice que no se debe emplear herencia simplemente por reutilizar código, es decir, que si quiero reutilizar código simplemente, no debo pensar en herencia como primera opción ¿por qué?
 
 ### Respuesta
 
+La herencia no debe usarse únicamente como un mecanismo de reutilización de código porque introduce una relación semántica fuerte entre clases: la relación “es‑un”. Cuando se hereda, se está afirmando que la subclase es un tipo específico de la superclase y que puede sustituirla en cualquier contexto. Si esta relación no es conceptualmente correcta y se usa solo para “aprovechar código ya hecho”, el diseño queda forzado y puede resultar confuso o incorrecto desde el punto de vista del dominio del problema.
+
+Uno de los principales problemas de usar herencia solo para reutilizar código es el acoplamiento fuerte que genera. La subclase queda ligada a la implementación interna de la superclase, incluso a detalles que no necesita. Cualquier cambio en la clase base puede afectar a todas las subclases, aunque esas subclases no tengan una relación conceptual sólida con ella. Esto reduce la flexibilidad del sistema y dificulta su mantenimiento y evolución.
+
+La composición, en cambio, permite reutilizar código sin establecer una relación de tipos. En lugar de “ser” algo, una clase “tiene” otra y delega en ella parte de su comportamiento. Este enfoque favorece un diseño más modular, donde los cambios quedan más localizados y los componentes pueden sustituirse con más facilidad. Además, la composición encaja mejor con la encapsulación, ya que no expone automáticamente la interfaz completa del objeto reutilizado.
+
+Por este motivo, se suele recomendar favorecer la composición frente a la herencia cuando el objetivo principal es reutilizar funcionalidad. La herencia debe reservarse para situaciones en las que exista una relación clara “es‑un” y en las que la compatibilidad de tipos y el comportamiento heredado tengan sentido en el modelo conceptual. De lo contrario, la reutilización mediante composición suele producir diseños más robustos, flexibles y fáciles de mantener.
+
+
 
 ## 11. Herencia vs. Composición. Se dice que se debe *"favorecer la composición frente a la herencia"*, ¿por qué?
 
 ### Respuesta
 
+Se dice que se debe favorecer la composición frente a la herencia porque la composición suele producir diseños más flexibles, menos acoplados y más fáciles de mantener. La herencia crea una relación muy fuerte entre clases, ya que la subclase queda vinculada de forma permanente a la superclase y a su implementación. Cualquier cambio en la clase base puede tener efectos colaterales en todas sus subclases, incluso en aquellas que solo reutilizaban una pequeña parte de su funcionalidad.
+
+La composición, en cambio, permite reutilizar comportamiento sin imponer una relación de tipos. Una clase puede contener a otra y delegar en ella ciertas responsabilidades, pero sin afirmar que “es‑un” caso particular de esa otra clase. Esto facilita cambiar la implementación interna, sustituir componentes o combinar comportamientos distintos sin afectar al resto del sistema. Desde el punto de vista del diseño, la composición reduce el impacto de los cambios y mejora la capacidad de evolución del código.
+
+Otro motivo importante es que la herencia tiende a ser estática, ya que la relación entre clases se define en tiempo de compilación y no puede cambiarse en ejecución. La composición permite una mayor variabilidad dinámica, ya que los objetos que se componen pueden decidirse en tiempo de ejecución. Esto resulta especialmente valioso cuando el comportamiento puede cambiar o configurarse según el contexto.
+
+Por estas razones, la herencia se considera una herramienta potente pero que debe usarse con cuidado, solo cuando exista una relación conceptual clara y estable. La recomendación de favorecer la composición no implica evitar la herencia, sino reservarla para los casos en que realmente modele correctamente el dominio, utilizando la composición como primera opción para compartir funcionalidad de forma segura y flexible.
 
 ## 12. Herencia vs. Composición. Se dice que la *"herencia rompe la encapsulación"*, ¿a qué se refiere esto?
 
 ### Respuesta
 
+Cuando se dice que la herencia rompe la encapsulación, se hace referencia a que una subclase puede acabar dependiendo de detalles internos de la superclase, incluso de aquellos que no formaban parte de su interfaz pública original. La encapsulación persigue ocultar la implementación interna de una clase y exponer solo lo necesario a través de una interfaz estable. Sin embargo, la herencia introduce una relación estrecha en la que la subclase conoce y utiliza información interna del padre, especialmente cuando se emplean miembros protected.
+
+Esta ruptura no significa que la encapsulación desaparezca por completo, sino que se debilita. Una subclase no solo depende de qué hace la superclase (su comportamiento observable), sino también de cómo lo hace. Si la superclase cambia su implementación interna —por ejemplo, modifica la forma de mantener su estado o la lógica de ciertos métodos—, la subclase puede verse afectada aunque la interfaz pública no haya cambiado. Esto contradice el objetivo de la encapsulación, que busca minimizar el impacto de los cambios internos.
+
+El problema se agrava cuando las subclases utilizan atributos o métodos protected de la superclase. Aunque estos elementos no sean públicos, pasan a formar parte de un contrato implícito entre la superclase y sus hijas. Cualquier modificación en esos miembros protegidos puede obligar a revisar todas las subclases, lo que aumenta el acoplamiento y dificulta el mantenimiento del sistema a largo plazo.
+
+Por este motivo se afirma que la herencia tiende a romper la encapsulación, en comparación con la composición. La composición permite interactuar con otro objeto exclusivamente a través de su interfaz pública, manteniendo intacto el principio de ocultación de información. En cambio, la herencia expone internamente la superclase a sus subclases, lo que hace que el diseño sea más frágil frente a cambios y requiera un uso cuidadoso y justificado.
+
 
 ## 13. Pongamos un ejemplo de dos alternativas para lo mismo. Tenemos un `Estudiante` y un `Trabajador`, ambos tienen datos en común: el DNI y el nombre. Modelemos esto de dos formas: uno por herencia, con una superclase `Persona`, y otro con composición, con una clase `DatosPersonales`. Se debe recibir una instancia de `DatosPersonales` en el constructor de la clase `Estudiante` y `Trabajador`.
 
 ### Respuesta
+
+Se puede modelar una misma realidad de distintas formas en orientación a objetos, y la elección entre herencia o composición tiene implicaciones importantes en el diseño. En este caso, Estudiante y Trabajador comparten datos comunes (DNI y nombre), lo que permite ilustrar claramente ambas alternativas. Cada enfoque es válido, pero expresa relaciones conceptuales distintas y ofrece diferentes niveles de flexibilidad.
+
+En el modelo basado en herencia, se introduce una superclase Persona que contiene los datos comunes. Tanto Estudiante como Trabajador heredan de ella, estableciendo una relación clara de tipo “es‑una”: un estudiante es una persona y un trabajador es una persona. Esta solución es sencilla y directa cuando la jerarquía es estable y tiene sentido desde el punto de vista del dominio. Los atributos comunes se centralizan en la superclase y se reutilizan automáticamente.
+
+class Persona {
+    protected String dni;
+    protected String nombre;
+
+    public Persona(String dni, String nombre) {
+        this.dni = dni;
+        this.nombre = nombre;
+    }
+}
+
+class Estudiante extends Persona {
+    public Estudiante(String dni, String nombre) {
+        super(dni, nombre);
+    }
+}
+
+class Trabajador extends Persona {
+    public Trabajador(String dni, String nombre) {
+        super(dni, nombre);
+    }
+}
+
+En el modelo basado en composición, no se introduce una relación de herencia entre Estudiante y Trabajador. En su lugar, ambos tienen unos DatosPersonales, que se representan mediante una clase independiente. Esto evita afirmar que ambos sean un tipo concreto de una clase base común y permite reutilizar los mismos datos personales en otros contextos si fuese necesario. Además, reduce el acoplamiento y mantiene una encapsulación más estricta.
+
+class DatosPersonales {
+    private String dni;
+    private String nombre;
+
+    public DatosPersonales(String dni, String nombre) {
+        this.dni = dni;
+        this.nombre = nombre;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+}
+
+class Estudiante {
+    private DatosPersonales datos;
+
+    public Estudiante(DatosPersonales datos) {
+        this.datos = datos;
+    }
+}
+
+class Trabajador {
+    private DatosPersonales datos;
+
+    public Trabajador(DatosPersonales datos) {
+        this.datos = datos;
+    }
+}
+
+Este ejemplo pone de manifiesto que la herencia expresa una relación conceptual fuerte, mientras que la composición favorece la reutilización sin imponer jerarquías rígidas. Por ello, la elección entre ambos enfoques debe basarse en el significado del dominio y en la evolución esperada del sistema, no únicamente en la eliminación de código duplicado.
